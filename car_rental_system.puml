@@ -1,0 +1,71 @@
+@startuml
+title Car Rental System - UML Class Diagram
+
+' Define classes
+class User {
+    - username: String
+    - password: String
+    - role: String
+    - first_name: String
+    - last_name: String
+    - phone: String
+    - email: String
+    + login(username: String, password: String): Boolean
+}
+
+class Customer {
+    - name: String
+    - address: String
+    - phone: String
+    - license_number: String
+    - insurance_company: String
+    - policy_number: String
+    + addCustomer(): void
+    + updateCustomer(): void
+}
+
+class Vehicle {
+    - car_id: Integer
+    - brand: String
+    - model: String
+    - year: Integer
+    - rate_per_day: Float
+    - rate_per_km: Float
+    - status: String
+    + addVehicle(): void
+    + updateVehicle(): void
+    + deleteVehicle(): void
+}
+
+class Reservation {
+    - reservation_id: Integer
+    - customer_name: String
+    - car_id: Integer
+    - start_date: Date
+    - end_date: Date
+    - status: String
+    + bookCar(): void
+    + updateReservation(): void
+}
+
+class FinancialReports {
+    + generateRevenueReport(): void
+    + generateBookingStatistics(): void
+}
+
+class Logs {
+    - log_id: Integer
+    - user: String
+    - action: String
+    - timestamp: DateTime
+    + addLog(): void
+}
+
+' Define relationships
+User "1" -- "many" Logs : creates
+User "1" -- "many" Reservation : manages
+Customer "1" -- "many" Reservation : books
+Vehicle "1" -- "many" Reservation : is reserved by
+Reservation "1" -- "1" FinancialReports : generates
+
+@enduml

@@ -2,26 +2,75 @@
 title Car Rental System - UML Class Diagram
 
 ' Define classes
-class User {
-    - username: String
-    - password: String
-    - role: String
-    - first_name: String
-    - last_name: String
-    - phone: String
-    - email: String
-    + login(username: String, password: String): Boolean
+class DatabaseUtility {
+    + execute_query(db_name: String, query: String, params: Tuple, fetch: Boolean): Any
 }
 
-class Customer {
-    - name: String
-    - address: String
-    - phone: String
-    - license_number: String
-    - insurance_company: String
-    - policy_number: String
-    + addCustomer(): void
-    + updateCustomer(): void
+class DatabaseManager {
+    + initialize_database(): void
+}
+
+class CarRentalApp {
+    - root: Tk
+    - current_user: Tuple
+    - user_manager: UserManager
+    - customer_manager: CustomerManager
+    - vehicle_manager: VehicleManager
+    - dashboard: Dashboard
+    + login(): void
+    + clear_content_frame(): void
+    + show_main_menu(): void
+    + show_notifications(): void
+    + show_reservations(): void
+    + show_new_reservation(): void
+    + show_financial_reports(): void
+    + show_customer_feedback(): void
+    + show_settings(): void
+    + show_logs(): void
+    + show_reports_and_analytics(): void
+    + show_employee_schedule(): void
+    + show_schedule_employees(): void
+    + log_action(user: String, action: String): void
+}
+
+class UserManager {
+    + login(username: String, password: String): Tuple
+    + show_users(): void
+    + show_add_employee(): void
+    + show_delete_employee(): void
+    + show_edit_employee(): void
+}
+
+class CustomerManager {
+    + show_customers(): void
+    + show_add_customer(): void
+    + show_delete_customer(): void
+}
+
+class VehicleManager {
+    + show_add_vehicle(): void
+    + show_vehicles_inventory(): void
+    + show_delete_vehicle(): void
+    + show_update_vehicle(): void
+    + show_manage_cars(): void
+    + show_available_cars(): void
+    + show_available_cars_manager(): void
+}
+
+class Dashboard {
+    + show_dashboard(): void
+    + _show_upcoming_reservations(): void
+    + _show_recent_notifications(): void
+    + _show_quick_actions(): void
+}
+
+class Reservation {
+    - reservation_id: Integer
+    - customer_name: String
+    - car_id: Integer
+    - start_date: Date
+    - end_date: Date
+    - status: String
 }
 
 class Vehicle {
@@ -32,40 +81,36 @@ class Vehicle {
     - rate_per_day: Float
     - rate_per_km: Float
     - status: String
-    + addVehicle(): void
-    + updateVehicle(): void
-    + deleteVehicle(): void
 }
 
-class Reservation {
-    - reservation_id: Integer
-    - customer_name: String
-    - car_id: Integer
-    - start_date: Date
-    - end_date: Date
-    - status: String
-    + bookCar(): void
-    + updateReservation(): void
+class Customer {
+    - name: String
+    - address: String
+    - phone: String
+    - license_number: String
+    - insurance_company: String
+    - policy_number: String
 }
 
-class FinancialReports {
-    + generateRevenueReport(): void
-    + generateBookingStatistics(): void
-}
-
-class Logs {
+class Log {
     - log_id: Integer
     - user: String
     - action: String
     - timestamp: DateTime
-    + addLog(): void
 }
 
 ' Define relationships
-User "1" -- "many" Logs : creates
-User "1" -- "many" Reservation : manages
-Customer "1" -- "many" Reservation : books
-Vehicle "1" -- "many" Reservation : is reserved by
-Reservation "1" -- "1" FinancialReports : generates
+CarRentalApp "1" -- "1" UserManager
+CarRentalApp "1" -- "1" CustomerManager
+CarRentalApp "1" -- "1" VehicleManager
+CarRentalApp "1" -- "1" Dashboard
+CarRentalApp "1" -- "many" Reservation
+CarRentalApp "1" -- "many" Log
+
+UserManager "1" -- "many" Log : creates
+CustomerManager "1" -- "many" Customer : manages
+VehicleManager "1" -- "many" Vehicle : manages
+Reservation "1" -- "1" Vehicle : reserves
+Reservation "1" -- "1" Customer : booked by
 
 @enduml
